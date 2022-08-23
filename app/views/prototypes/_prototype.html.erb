@@ -7,6 +7,6 @@
     </p>
      <%# user_pathをuser_path(current_user)に変更した %>
 
-    <%= link_to "by #{prototype.user.name}", user_path(prototype.id), class: :card__user %>
+    <%= link_to "by #{prototype.user.name}", user_path(prototype.user_id), class: :card__user %>
   </div>
 </div>

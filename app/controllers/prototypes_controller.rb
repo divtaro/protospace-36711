@@ -1,7 +1,9 @@
 class PrototypesController < ApplicationController
-  before_action :authenticate_user!
-  # before_action :set_prototype, only: [:edit, :show, :destroy]
-  before_action :move_to_index, except: [:index, :show]
+  # ↓ この場所にこの記述がされていると、ログイン/ログアウトに関わらず、トップページが表示されない。
+  # before_action :authenticate_user!
+
+  # ↓ ただし、exceptで一部のアクションを対象から除外すれば、そのアクションは表示される。
+  before_action :authenticate_user! ,except: [:index, :show]
 
   def index
     @prototypes = Prototype.all.includes(:user)
@@ -12,8 +14,8 @@ class PrototypesController < ApplicationController
   end
 
   def create
-    Prototype.create(prototype_params)
     @prototype = Prototype.create(prototype_params)
+    
     if @prototype.save
       redirect_to root_path(@prototype)
     else
@@ -53,6 +55,9 @@ class PrototypesController < ApplicationController
     @prototype = Prototype.find(params[:id])
     @comment = Comment.new
     @comments = @prototype.comments.includes(:user)
+
+    # @user = User.find(params[:id])
+    # @name = @user.name
   end
 
 
@@ -69,7 +74,7 @@ class PrototypesController < ApplicationController
 
   def move_to_index
     unless user_signed_in?
-    redirey_to action: :index
+    redirect_to action: :index
     end
   end
 end
